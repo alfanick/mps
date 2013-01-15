@@ -7,7 +7,7 @@ class Graph(object):
         self.klist = []
         for i in range(n):
             self.klist.append( [ ] )
-
+            
     def append(self, n, m, k):
         self.klist[n].append( (m, k,) )
     
@@ -29,6 +29,12 @@ class Graph(object):
           return True
         elif not visited[x]:
           return self.is_connected(x, m, visited)
+      return False
+    
+    def cost(self, u, v):
+      for (x,w) in self.klist[u]:
+        if x is v:
+          return w
       return False
 
     def neighbours_matrix(self):
