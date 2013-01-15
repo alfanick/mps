@@ -1,7 +1,3 @@
-class Reader(object):
-    def __init__(self, n, m):
-        pass
-
 class Graph(object):
     def __init__(self, n):
         self.klist = []
@@ -45,3 +41,24 @@ class Graph(object):
                 matrix[i][u] = w
         return matrix
 
+    def __str__(self):
+        ret = ""
+        for (a, A) in enumerate(self.klist):
+            ret += "%d:\n  " % a
+
+            ret += ", ".join(["  %d (%d)" % x for x in A])
+        return ret
+
+
+    @staticmethod
+    def from_input():
+        n, m = (int(v) for v in raw_input().split())
+
+        G = Graph(m)
+
+        for i in range(m):
+            a, b, c = (int(v) for v in raw_input().split())
+
+            G.append(a, b, c)
+        
+        return G
