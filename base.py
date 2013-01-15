@@ -2,7 +2,7 @@ class Graph(object):
     def __init__(self, n):
         self.klist = []
         self.size = 0
-        for i in range(n):
+        for i in xrange(n):
             self.klist.append( [ ] )
             self.size = n
             
@@ -34,7 +34,7 @@ class Graph(object):
 
     def neighbours_matrix(self):
         matrix = []
-        for i in range(0, self.size):
+        for i in xrange(self.size):
             matrix.append([-1] * self.size)
         for i,adj in enumerate(self.klist):
             for u,w in adj:
@@ -46,7 +46,7 @@ class Graph(object):
         for (a, A) in enumerate(self.klist):
             ret += "%d:\n  " % a
 
-            ret += ", ".join(["  %d (%d)" % x for x in A])
+            ret += ", ".join(["  %d(%d)" % x for x in A]) + "\n"
         return ret
 
 
@@ -54,11 +54,9 @@ class Graph(object):
     def from_input():
         n, m = (int(v) for v in raw_input().split())
 
-        G = Graph(m)
+        G = Graph(n)
 
-        for i in range(m):
-            a, b, c = (int(v) for v in raw_input().split())
-
-            G.append(a, b, c)
+        for i in xrange(m):
+            G.append(*(int(v) for v in raw_input().split()))
         
         return G
