@@ -12,10 +12,24 @@ class Graph(object):
         self.klist[n].append( (m, k,) )
     
     def is_incident(self, n, m):
-        try
+        try:
             return len([True for (x,y) in self.klist[n] if x == m]) > 0
         except:
             return False
+    
+    def _visit(self, n):
+      pass
+            
+    def is_connected(self, n, m, visited=False):
+      if not visited:
+        visited = [False]*len(self.klist)
+      visited[n] = True
+      for (x,y) in self.klist[n]:
+        if x == m:
+          return True
+        elif not visited[x]:
+          return self.is_connected(x, m, visited)
+      return False
 
     def neighbours_matrix(self):
         pass
