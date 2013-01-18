@@ -22,7 +22,7 @@ def tsp(G, select_function = longest, start = 0, allowed = True):
     if allowed is True:
         allowed = range(0, G.size)
 
-    #allowed.remove(start)
+    allowed.remove(start)
 
     allowed_and_adjacent = { }
 
@@ -32,13 +32,16 @@ def tsp(G, select_function = longest, start = 0, allowed = True):
 
     if (len(allowed_and_adjacent) > 0):
         next_city = select_function(allowed_and_adjacent)
-        allowed.remove(start)
         length = G.cost(start, next_city)
 
         result = tsp(G, select_function, next_city, allowed)
         
         length += result[0]
         path += result[1]
+
+    if len(path) == G.size:
+        length += G.cost(path[-1], path[0])
+        path += [path[0]]
 
     return (length, path)
 
