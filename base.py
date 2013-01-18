@@ -19,7 +19,7 @@ class Graph(object):
         self.undirected = undirected
         self.size = 0
         for i in xrange(n):
-            self.klist.append( [ ] )
+            self.klist.append( { } )
             self.size = n
             
     def append(self, n, m, k):
@@ -31,10 +31,10 @@ class Graph(object):
         k - cost
         '''
 
-        self.klist[n].append( (m, k,) )
+        self.klist[n][m] = k
 
         if self.undirected:
-            self.klist[m].append( (n, k, ) )
+            self.klist[m][n] = k 
     
     def is_incident(self, n, m):
         '''
@@ -42,7 +42,7 @@ class Graph(object):
         '''
 
         try:
-            return len([True for (x,y) in self.klist[n] if x == m]) > 0
+            return m in self.klist[n]
         except:
             return False
     
@@ -55,7 +55,7 @@ class Graph(object):
             visited = [False] * self.size
         visited[n] = True
         
-        for (x,y) in self.klist[n]:
+        for x in self.klist[n].iterkeys():
             if x == m:
                 return True
             elif not visited[x]:
@@ -67,9 +67,8 @@ class Graph(object):
         Returns a cost between two incident verticies
         '''
 
-        for (x,w) in self.klist[u]:
-            if x == v:
-                return w
+        if v in self.klist[u]:
+            return self.klist[u][v]
         return False
 
     def neighbours_matrix(self):
@@ -81,9 +80,18 @@ class Graph(object):
         for i in xrange(self.size):
             matrix.append([-1] * self.size)
         for i,adj in enumerate(self.klist):
-            for u,w in adj:
+            for u,w in adj.iteritems():
                 matrix[i][u] = w
         return matrix
+    
+    def adjacency_list(self, v):
+        '''
+        Returns adjacency list for vertex v
+        '''
+        
+        return self.klist[v]
+        
+        
 
     def remove_edge(self, a, b):
         '''
@@ -108,8 +116,7 @@ class Graph(object):
         ret = ""
         for (a, A) in enumerate(self.klist):
             ret += "%d:\n  " % a
-
-            ret += ", ".join(["  %d(%d)" % x for x in A]) + "\n"
+            ret += ", ".join(["  %d(%d)" % x for x in A.iteritems()]) + "\n"
         return ret
 
 
