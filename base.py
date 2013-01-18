@@ -1,4 +1,5 @@
 from random import randrange
+from math import ceil
 
 class Graph(object):
     '''
@@ -84,6 +85,21 @@ class Graph(object):
                 matrix[i][u] = w
         return matrix
 
+    def remove_edge(self, a, b):
+        '''
+        Removes connection between a and b (one way only!).
+
+        If graph is undirected, removing connection from a to b, will not
+        remove connection form b to a.
+        '''
+
+        if self.is_connected(a, b):
+            self.klist[a] = filter(lambda x: x[0] != b, self.klist[a])
+
+            return True
+
+        return False
+
     def __str__(self):
         '''
         Human readable form of the graph
@@ -130,4 +146,31 @@ class Graph(object):
             for j in xrange(i):
                 G.append(i, j, randrange(1, max_c))
         
+        return G
+
+    @staticmethod
+    def random(n = 8, f = 0.7, max_c = False):
+        '''
+        Creates random undirected graph with given size n and fill factor.
+        '''
+
+        if max_c is False:
+            max_c = n*n
+
+        G = Graph(n)
+
+        e = int(ceil(((n*(n-1))/2.0) * f))
+
+        for i in xrange(e):
+            while True:
+                a = randrange(0, n)
+                b = randrange(0, n)
+                
+                if a == b or G.is_incident(a,b):
+                    continue
+
+                G.append(a, b, randrange(0, max_c))
+
+                break
+
         return G
