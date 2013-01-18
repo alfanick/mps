@@ -101,8 +101,8 @@ class Graph(object):
         remove connection form b to a.
         '''
 
-        if self.is_connected(a, b):
-            self.klist[a] = filter(lambda x: x[0] != b, self.klist[a])
+        if self.is_incident(a, b):
+            del self.klist[a][b]
 
             return True
 
