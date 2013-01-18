@@ -17,10 +17,9 @@ class Graph(object):
 
         self.klist = []
         self.undirected = undirected
-        self.size = 0
+        self.size = n
         for i in xrange(n):
             self.klist.append( { } )
-            self.size = n
             
     def append(self, n, m, k):
         '''
