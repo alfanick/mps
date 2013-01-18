@@ -22,7 +22,7 @@ def tsp(G, select_function = longest, start = 0, allowed = True):
     if allowed is True:
         allowed = range(0, G.size)
 
-    allowed.remove(start)
+    #allowed.remove(start)
 
     allowed_and_adjacent = { }
 
@@ -32,6 +32,7 @@ def tsp(G, select_function = longest, start = 0, allowed = True):
 
     if (len(allowed_and_adjacent) > 0):
         next_city = select_function(allowed_and_adjacent)
+        allowed.remove(start)
         length = G.cost(start, next_city)
 
         result = tsp(G, select_function, next_city, allowed)
@@ -40,3 +41,12 @@ def tsp(G, select_function = longest, start = 0, allowed = True):
         path += result[1]
 
     return (length, path)
+
+if __name__ == '__main__':
+    print "Result for random 10-vertex complete graph"
+    graph = Graph.complete(10)
+    graph.linearize()
+
+    print "Greedy selecting longest: %s, %s" % tsp(graph, longest)
+    print "Greedy selecting shortest: %s, %s" % tsp(graph, shortest)
+    print "Greedy selecting randomly: %s, %s" % tsp(graph, random)

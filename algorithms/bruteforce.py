@@ -31,8 +31,10 @@ def bruteforce(graph, start=0):
         return (False, False)
         
 if __name__ == '__main__':
-    print "Result for random 5-vertex complete graph"
-    graph = Graph.complete(5)
+    print "Result for random 10-vertex complete graph"
+    graph = Graph.complete(10)
+    graph.linearize()
+
     cost, path = bruteforce(graph)
     if cost is not False:
         print "Cheapest path costs %d and constists of: %s" % (cost, ", ".join(map(str,path)))
