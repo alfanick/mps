@@ -53,3 +53,6 @@ if __name__ == '__main__':
     print "Greedy selecting longest: %s, %s" % tsp(graph, longest)
     print "Greedy selecting shortest: %s, %s" % tsp(graph, shortest)
     print "Greedy selecting randomly: %s, %s" % tsp(graph, random)
+
+    print "Greedy selecting random, minimal: %d" % min([tsp(graph, random)[0] for
+        i in xrange(1000)])
