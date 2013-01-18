@@ -134,7 +134,7 @@ class Graph(object):
     def complete(n = 8, max_c = False):
         '''
         Creates complete undirected graph of given size n. It randomizes cost
-        from [0, max_c) - where max_c is n*n unless given.
+        from [1, max_c) - where max_c is n*n unless given.
         '''
 
         if max_c is False:
@@ -169,7 +169,7 @@ class Graph(object):
                 if a == b or G.is_incident(a,b):
                     continue
 
-                G.append(a, b, randrange(0, max_c))
+                G.append(a, b, randrange(1, max_c))
 
                 break
 
