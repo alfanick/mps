@@ -28,7 +28,7 @@ class Graph(object):
     
     def cost(self, u, v):
       for (x,w) in self.klist[u]:
-        if x is v:
+        if x == v:
           return w
       return False
 
