@@ -35,7 +35,7 @@ class Graph(object):
         if self.undirected:
             self.klist[m][n] = k 
     
-    def is_incident(self, n, m):
+    def is_adjacent(self, n, m):
         '''
         Check if two vertices are incident (directly connected)
         '''
@@ -100,7 +100,7 @@ class Graph(object):
         remove connection form b to a.
         '''
 
-        if self.is_incident(a, b):
+        if self.is_adjacent(a, b):
             del self.klist[a][b]
 
             return True
@@ -176,7 +176,7 @@ class Graph(object):
                 a = randrange(0, n)
                 b = randrange(0, n)
                 
-                if a == b or G.is_incident(a,b):
+                if a == b or G.is_adjacent(a,b):
                     continue
 
                 G.append(a, b, randrange(1, max_c))
