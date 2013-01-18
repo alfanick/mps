@@ -87,7 +87,7 @@ class GeneticTSP(object):
             for i in xrange(self.longliving):
                 heappush(new_population, heappop(self.population))
             
-            for i in range(self.longliving, self.population_size):
+            for i in xrange(self.longliving, self.population_size):
                 experiment = copy(heappop(self.population))
                 if random() < self.mutation_factory:
                     experiment.mutate()
