@@ -25,16 +25,10 @@ class Genome(list):
             a = randrange(len(self))
             b = randrange(len(self))
 
-        t = self[a]
-        self[a] = self[b]
-        self[b] = t
-
         ea = self.eval()
 
         if ea > eb:
-            t = self[a]
-            self[a] = self[b]
-            self[b] = t
+            self[a], self[b] = self[b], self[a]
         else:
             self.et = False
 
@@ -44,9 +38,7 @@ class Genome(list):
             i = other.index(self[0])
             if self.graph.cost(other[i], other[i+1]) <= self.graph.cost(self[0], self[1]):
                 k = self.index(other[i+1])
-                t = self[k]
-                self[k] = self[1]
-                self[1] = t
+                self[1], self[k] = self[k], self[1]
                 self.et = False
         except:
             pass
