@@ -25,6 +25,8 @@ class Genome(list):
             a = randrange(len(self))
             b = randrange(len(self))
 
+        self[a], self[b] = self[b], self[a]
+        
         ea = self.eval()
 
         if ea > eb:
@@ -105,9 +107,9 @@ if __name__ == '__main__':
     graph = Graph.complete(10)
     graph.linearize()
 
-    gtsp = GeneticTSP(graph, 2, 50, 0.15, 0.1)
+    gtsp = GeneticTSP(graph, 3, 50, 0.15, 0.1)
 
-    gtsp.run(50)
+    gtsp.run(100)
 
     length, path = gtsp.result()
 
