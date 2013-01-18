@@ -118,6 +118,10 @@ class Graph(object):
             ret += ", ".join(["  %d(%d)" % x for x in A.iteritems()]) + "\n"
         return ret
 
+    def linearize(self):
+        for (a, A) in enumerate(self.klist):
+            for (b, w) in A.iteritems():
+                self.klist[a][b] = abs(a-b)
 
     @staticmethod
     def from_input(undirected = True):
