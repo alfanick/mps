@@ -1,29 +1,86 @@
 from algorithms import bruteforce, ant_colony, greedy, genetic
 from base import *
+import sys
+from time import time
+
+def bruteforce_run(graph):
+    return bruteforce.bruteforce(graph)
+
+def greedy_shortest(graph):
+    return greedy.tsp(graph, func_name="shortest")
+
+def greedy_longest(graph):
+    return greedy.tsp(graph, func_name="longest")
+
+def genetic_10n(graph):
+    gtsp = genetic.GeneticTSP(graph, 3, 50, 0.35, 0.1)
+    gtsp.run(graph.size * 10)
+    return gtsp.result()
+
+def genetic_100n(graph):
+    gtsp = genetic.GeneticTSP(graph, 3, 50, 0.35, 0.1)
+    gtsp.run(graph.size * 100)
+    return gtsp.result()
+
+def ant_colony_10n(graph):
+    colony = ant_colony.AntColony(graph, ants_number=15,
+            iterations=graph.size*10)
+    return colony.run()
+
+def ant_colony_100n(graph):
+    colony = ant_colony.AntColony(graph, ants_number=15,
+            iterations=graph.size*100)
+    return colony.run()
 
 if __name__ == '__main__':
-    print "### Benchmark for 10-vertex complete, random graph ###\n\n"
-    graph = Graph.complete(10)
-    #graph.linearize()
+    N = xrange(3,11)
+    AVG = 5
+
+    benchmark_set = [Graph.complete(n) for n in N]
     
-    # Bruteforce
-    cost, path = bruteforce.bruteforce(graph)
-    print "Bruteforce algorithm - Shortest, optimal\n%d - %s\n" % (cost, path,)
-    
-    # Greedy
-    cost, path = greedy.tsp(graph, func_name="shortest")
-    print "Greedy algorithm - shortest path\n%d - %s\n" % (cost, path,)
-    cost, path = greedy.tsp(graph, func_name="longest")
-    print "Greedy algorithm - longest path\n%d - %s\n" % (cost, path,)
-    
-    # Genetic
-    gtsp = genetic.GeneticTSP(graph, 3, 50, 0.15, 0.1)
-    gtsp.run(100)
-    cost, path = gtsp.result()
-    print "Genetic algorithm - shortest path\n%d - %s\n" % (cost, path,)
-    
-    # Ant Colony
-    colony = ant_colony.AntColony(graph, ants_number=15, iterations=120)
-    cost, path = colony.run()
-    print "Ant Colony algorithm - shortest path\n%d - %s\n" % (cost, path,)
-    
+    ALGORITHMS = []
+    ALGORITHMS.append(('Brute Force', bruteforce_run,))
+    ALGORITHMS.append(('Greedy Shortest', greedy_shortest,))
+    ALGORITHMS.append(('Greedy Longest', greedy_longest,))
+    ALGORITHMS.append(('Genetic 10n', genetic_10n,))
+    ALGORITHMS.append(('Genetic 100n', genetic_100n,))
+    ALGORITHMS.append(('Ant Colony 10n', ant_colony_10n,))
+    ALGORITHMS.append(('Ant Colony 100n', ant_colony_100n,))
+
+    TIME = [dict() for n in N]
+    RESULT = [dict() for n in N]
+
+    for (n, G) in enumerate(benchmark_set):
+        print "Benchmarking %d-vertices complete, random graph" % (n + N[0])
+
+        for (name, tsp) in ALGORITHMS:
+            print "  %s:" % name
+            
+            t = 0
+            min_length = 10000000
+            min_path = []
+            start_time = 0
+            end_time = 0
+            for k in xrange(AVG):
+                sys.stdout.write("    #%d: " % (k+1))
+                start_time = time()
+                length, path = tsp(G)
+                end_time = time() - start_time
+                t += end_time
+                if length < min_length:
+                    min_length = length
+                    min_path = []
+                sys.stdout.write("%d in %.3fs\n      " % (length, end_time))
+                print path
+            TIME[n][name] = t/float(AVG)
+            RESULT[n][name] = float(min_length)
+            bt =  TIME[n][name] / TIME[n]['Brute Force'] 
+            bl = RESULT[n][name] / RESULT[n]['Brute Force']
+            d = (name, min_length, t/AVG, bt * 100, bl * 100, bl * bt * 100)
+            sys.stdout.write("\n    '%s' best %d in %.3fs (t = %.2f%%BF, l = %.2f%%BF, overall %.2f%%)\n      " % d)
+            print path
+            print
+
+        print "\n\n"
+
+
