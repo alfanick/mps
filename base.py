@@ -150,6 +150,37 @@ class Graph(object):
             G.append(*(int(v) for v in raw_input().split()))
         
         return G
+            
+    @staticmethod
+    def from_file(filename, undirected = True):
+        '''
+        Parses stdin into graph.
+        First row: n - number of verticles
+        n rows - costs for each verticle
+        '''
+        
+        try:
+            f = open(filename, 'r')
+        except:
+            print 'File "%s" does not exist' % (filename,)
+        
+        lines = [line.strip() for line in f]
+        
+        try:
+            n = int(lines[0])
+        except:
+            print 'Invalid file format. Moving further.'
+            return False
+        
+        G = Graph(n, undirected)
+        
+        for i in xrange(n):
+            costs = [int(c) for c in lines[i+1].split()]
+            for j in xrange(len(costs)):
+                G.append(i,j, costs[j])
+        
+        return G
+                
 
     @staticmethod
     def complete(n = 8, max_c = False):

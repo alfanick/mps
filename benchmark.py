@@ -1,6 +1,7 @@
 from algorithms import bruteforce, ant_colony, greedy, genetic
 from base import *
 import sys
+import os
 from time import time
 
 def bruteforce_run(graph):
@@ -31,12 +32,20 @@ def ant_colony_100n(graph):
     colony = ant_colony.AntColony(graph, ants_number=15,
             iterations=graph.size*100)
     return colony.run()
+    
+def file_inputs_graphes():
+    inputs = os.listdir('tests/')
+    for filename in inputs:
+        if Graph.from_file('tests/%s' % (filename)) is not False:
+            yield Graph.from_file('tests/%s' % (filename))
+    
 
 if __name__ == '__main__':
     N = xrange(3,12)
     AVG = 5
 
-    benchmark_set = [Graph.complete(n) for n in N]
+    #benchmark_set = [Graph.complete(n) for n in N]
+    benchmark_set = file_inputs_graphes()
     
     ALGORITHMS = []
     ALGORITHMS.append(('Brute Force', bruteforce_run,))
