@@ -82,8 +82,8 @@ class AntColony(object):
     def __init__(self, graph, ants_number, iterations):
         # Parameters
         self.ro = 0.9
-        self.alfa = 0.5
-        self.beta = 1
+        self.alfa = 1
+        self.beta = 3.5
 
         self.graph = graph
         
@@ -133,7 +133,7 @@ class AntColony(object):
         for i in xrange(self.iterations):
             
             ants = []
-            for i in xrange(self.ants_number):
+            for j in xrange(self.ants_number):
                 ants.append(Ant(self.graph, 0, self))
                 
             for ant_id,ant in enumerate(ants):
