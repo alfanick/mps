@@ -64,14 +64,15 @@ if __name__ == '__main__':
             for k in xrange(AVG):
                 sys.stdout.write("    #%d: " % (k+1))
                 start_time = time()
+                
                 length, path = tsp(G)
+
                 end_time = time() - start_time
                 t += end_time
                 if length < min_length:
                     min_length = length
                     min_path = []
-                sys.stdout.write("%d in %.3fs\n      " % (length, end_time))
-                print path
+                sys.stdout.write("%d in %.3fs\n" % (length, end_time))
             TIME[n][name] = t/float(AVG)
             RESULT[n][name] = float(min_length)
             bt =  TIME[n][name] / TIME[n]['Brute Force'] 
@@ -82,5 +83,17 @@ if __name__ == '__main__':
             print
 
         print "\n\n"
+
+    print "\n\n"
+    print "Nazwa,%s" % (",".join(map(lambda x: str(x), N)))
+    for (name, tsp) in ALGORITHMS:
+        sys.stdout.write("%s," % name)
+        sys.stdout.write("%s\n" % (",".join(map(lambda n: "%.5f" % TIME[n-N[0]][name], N))))
+
+    print "\n\n"
+    print "Nazwa,%s" % (",".join(map(lambda x: str(x), N)))
+    for (name, tsp) in ALGORITHMS:
+        sys.stdout.write("%s," % name)
+        sys.stdout.write("%s\n" % (",".join(map(lambda n: "%d" % RESULT[n-N[0]][name], N))))
 
 
