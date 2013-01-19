@@ -3,7 +3,7 @@ from base import *
 
 if __name__ == '__main__':
     print "### Benchmark for 10-vertex complete, random graph ###\n\n"
-    graph = Graph.complete(15)
+    graph = Graph.complete(10)
     #graph.linearize()
     
     # Bruteforce
