@@ -4,7 +4,7 @@ import sys
 from time import time
 
 def bruteforce_run(graph):
-    return bruteforce.bruteforce(graph)
+    return bruteforce.bruteforce2(graph)
 
 def greedy_shortest(graph):
     return greedy.tsp(graph, func_name="shortest")
@@ -33,7 +33,7 @@ def ant_colony_100n(graph):
     return colony.run()
 
 if __name__ == '__main__':
-    N = xrange(3,11)
+    N = xrange(3,12)
     AVG = 5
 
     benchmark_set = [Graph.complete(n) for n in N]

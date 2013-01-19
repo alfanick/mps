@@ -1,6 +1,7 @@
 import sys
 sys.path.append('..')
 from base import *
+from itertools import permutations
 
 cycles = []
 
@@ -29,7 +30,19 @@ def bruteforce(graph, start=0):
         return cycles[0]
     except:
         return (False, False)
-        
+
+def bruteforce2(graph):
+    min_path = []
+    min_cost = 10000000
+    for path in permutations(xrange(graph.size)):
+        path += (path[0],)
+        cost = 0
+        for i in xrange(graph.size):
+            cost += graph.cost(path[i], path[i+1])
+        if (cost < min_cost):
+            min_cost = cost
+            min_path = path
+    return (min_cost, list(min_path),)
 if __name__ == '__main__':
     print "Result for random 10-vertex complete graph"
     graph = Graph.complete(10)
