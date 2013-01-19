@@ -4,7 +4,8 @@ import sys
 from time import time
 
 def bruteforce_run(graph):
-    return bruteforce.bruteforce(graph)
+    brut = bruteforce.Bruteforce(graph)
+    return brut.run()
 
 def greedy_shortest(graph):
     return greedy.tsp(graph, func_name="shortest")
