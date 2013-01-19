@@ -134,7 +134,7 @@ class AntColony(object):
             
             ants = []
             for i in range(self.ants_number):
-                ants.append(Ant(graph, 0, self))
+                ants.append(Ant(self.graph, 0, self))
                 
             for ant_id,ant in enumerate(ants):
                 while ant.step():
