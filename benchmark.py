@@ -10,9 +10,6 @@ def bruteforce_run(graph):
 def greedy_shortest(graph):
     return greedy.tsp(graph, func_name="shortest")
 
-def greedy_longest(graph):
-    return greedy.tsp(graph, func_name="longest")
-
 def genetic_10n(graph):
     gtsp = genetic.GeneticTSP(graph, 3, 50, 0.35, 0.1)
     gtsp.run(graph.size * 10)
@@ -61,7 +58,6 @@ if __name__ == '__main__':
     if rnd:
         ALGORITHMS.append(('Brute Force', bruteforce_run,))     # Comment to fuck bruteforce!!!!
     ALGORITHMS.append(('Greedy Shortest', greedy_shortest,))
-    ALGORITHMS.append(('Greedy Longest', greedy_longest,))
     ALGORITHMS.append(('Genetic 10n', genetic_10n,))
     ALGORITHMS.append(('Genetic 100n', genetic_100n,))
     ALGORITHMS.append(('Ant Colony 10n', ant_colony_10n,))
