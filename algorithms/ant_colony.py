@@ -32,7 +32,7 @@ class Ant(object):
         to_sum = [ ((self.colony.pheromones[i][x])**self.colony.alfa*(1.0/y)**self.colony.beta) for (x,y) in available ]
         entire = sum(to_sum)
         
-        #Calculate probability for each available node
+        # Calculate probability for each available node
         res = []
         for (j,cost) in available:
             # Given equation (16.3 top)
