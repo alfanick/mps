@@ -14,12 +14,23 @@ class Graph(object):
         undirected - True if graph should be undirected, False for directed.
                      Complementary edges are added automatically
         '''
-
-        self.klist = []
-        self.undirected = undirected
-        self.size = n
-        for i in xrange(n):
-            self.klist.append( { } )
+        
+        if type(n) is Graph:
+            self.klist = n.klist[:]
+            self.size = n.size
+            self.undirected = n.undirected
+            self.klist = []
+            for i in xrange(len(n.klist)):
+                self.klist.append( { } )
+                for k,v in n.klist[i].iteritems():
+                    self.klist[i][k] = v
+        else:
+            self.klist = []
+            self.undirected = undirected
+            self.size = n
+            for i in xrange(n):
+                self.klist.append( { } )
+    
             
     def append(self, n, m, k):
         '''
