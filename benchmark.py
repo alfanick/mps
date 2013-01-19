@@ -44,13 +44,22 @@ if __name__ == '__main__':
     N = xrange(3,12)
     AVG = 5
 
-    benchmark_set = [Graph.complete(n) for n in N]
-    
+    benchmark_set = []
+    rnd = True
+
+    if len(sys.argv) == 2:
+        benchmark_set = [Graph.from_file(sys.argv[1])]
+        N = [benchmark_set[0].size]
+        rnd = False
+    else:
+        benchmark_set = [Graph.complete(n) for n in N]
+
     # Uncomment to get inputs from files in tests dir
     #benchmark_set = file_inputs_graphes()
     
     ALGORITHMS = []
-    ALGORITHMS.append(('Brute Force', bruteforce_run,))     # Comment to fuck bruteforce!!!!
+    if rnd:
+        ALGORITHMS.append(('Brute Force', bruteforce_run,))     # Comment to fuck bruteforce!!!!
     ALGORITHMS.append(('Greedy Shortest', greedy_shortest,))
     ALGORITHMS.append(('Greedy Longest', greedy_longest,))
     ALGORITHMS.append(('Genetic 10n', genetic_10n,))
@@ -62,7 +71,11 @@ if __name__ == '__main__':
     RESULT = [dict() for n in N]
 
     for (n, G) in enumerate(benchmark_set):
-        print "Benchmarking %d-vertices complete, random graph" % (n + N[0])
+        if rnd:
+            print "Benchmarking %d-vertices complete, random graph" % (n + N[0])
+        else:
+            print "Benchmarking %d-vertices complete graph '%s'" % (n + N[0],
+                    sys.argv[1])
 
         for (name, tsp) in ALGORITHMS:
             print "  %s:" % name
@@ -87,16 +100,15 @@ if __name__ == '__main__':
             TIME[n][name] = t/float(AVG)
             RESULT[n][name] = float(min_length)
             
-            # Comment to fuck bruteforce!!!!
-            bt =  TIME[n][name] / TIME[n]['Brute Force'] 
-            bl = RESULT[n][name] / RESULT[n]['Brute Force']
+            if rnd:
+                bt =  TIME[n][name] / TIME[n]['Brute Force'] 
+                bl = RESULT[n][name] / RESULT[n]['Brute Force']
             
-            # Uncomment to fuck bruteforce!!!!
-            #bt = 1
-            #bl = 1
-            
-            d = (name, min_length, t/AVG, bt * 100, bl * 100, bl * bt * 100)
-            sys.stdout.write("\n    '%s' best %d in %.3fs (t = %.2f%%BF, l = %.2f%%BF, overall %.2f%%)\n      " % d)
+                d = (name, min_length, t/AVG, bt * 100, bl * 100, bl * bt * 100)
+                sys.stdout.write("\n    '%s' best %d in %.3fs (t = %.2f%%BF, l = %.2f%%BF, overall %.2f%%)\n      " % d)
+            else:
+                sys.stdout.write("\n    '%s' best %d in %.3fs\n      " % (name,
+                    min_length, t/AVG))
             print path
             print
 
