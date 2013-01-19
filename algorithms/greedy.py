@@ -13,7 +13,17 @@ def shortest(available):
 def longest(available):
     return max(available, key=available.get)
 
-def tsp(G, select_function = longest, start = 0, allowed = True):
+def tsp(G, select_function = longest, start = 0, allowed = True, func_name = None):
+    # For benchmarking
+    if func_name is not None:
+        if func_name == "longest":
+            select_function = longest
+        elif func_name == "shortest":
+            select_function = shortest
+        elif func_name == "random":
+            select_function = random
+            
+            
     path = []
     length = 0
 
