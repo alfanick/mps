@@ -15,7 +15,7 @@ class Ant(object):
         
         # Local pheromones values
         self.pheromones = []
-        for i in range(self.graph.size):
+        for i in xrange(self.graph.size):
             self.pheromones.append( { } )
         
     def probabilities(self, i):
@@ -97,7 +97,7 @@ class AntColony(object):
         self.basic_pheromone = 1.0 / (self.graph.size * 0.5 * avg)
         
         self.pheromones = []
-        for i in range(self.graph.size):
+        for i in xrange(self.graph.size):
             self.pheromones.append( { } )
             for node in self.graph.adjacency_list(i):
                 self.pheromones[i][node] = self.basic_pheromone
@@ -111,11 +111,11 @@ class AntColony(object):
         '''
         
         dry = []
-        for i in range(self.graph.size):
+        for i in xrange(self.graph.size):
             dry.append( { } )
         
         for ant in ants:
-            for i in range(self.graph.size):
+            for i in xrange(self.graph.size):
                 for j,pheromone in ant.pheromones[i].iteritems():
                     if j not in dry[i]:
                         self.pheromones[i][j] = (1-self.ro)*self.pheromones[i][j]
@@ -130,10 +130,10 @@ class AntColony(object):
         best_cost = sys.maxint
         best_path = []
         
-        for i in range(self.iterations):
+        for i in xrange(self.iterations):
             
             ants = []
-            for i in range(self.ants_number):
+            for i in xrange(self.ants_number):
                 ants.append(Ant(graph, 0, self))
                 
             for ant_id,ant in enumerate(ants):
@@ -156,8 +156,8 @@ class AntColony(object):
     def average(self, matrix):
         
         suma = 0
-        for r in range(0, self.graph.size):
-            for s in range(0, self.graph.size):
+        for r in xrange(0, self.graph.size):
+            for s in xrange(0, self.graph.size):
                 suma += matrix[r][s]
 
         avg = suma / (self.graph.size * self.graph.size)
@@ -167,8 +167,8 @@ class AntColony(object):
         
         
 if __name__ == '__main__':
-    graph = Graph.complete(10)
-    colony = AntColony(graph, 15, 120)
+    graph = Graph.from_input()
+    colony = AntColony(graph, 10, 10)
     cost, path = colony.run()
     print cost, path
     
