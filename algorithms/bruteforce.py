@@ -2,40 +2,52 @@ import sys
 sys.path.append('..')
 from base import *
 
-cycles = []
 
-def find_cycles(graph, node=0, path=[], cost=0):
-    path.append(node)
-    
-    if len(path) > 1:
-        cost += graph.cost(path[-2], node)
-    
-    if len(path) == graph.size and graph.is_adjacent(node, path[0]):
-        path.append(path[0])
-        cost += graph.cost(node, path[0])
-        global cycles
-        cycles.append((cost, path,))
-    else:
-        for u in graph.adjacency_list(node).iterkeys():
-            if u not in path:
-                find_cycles(graph, u, list(path), cost)
-            
-            
-def bruteforce(graph, start=0):
-    global cycles
-    find_cycles(graph, start)
-    cycles.sort()
-    try:
-        return cycles[0]
-    except:
-        return (False, False)
+class Bruteforce(object):
+    def __init__(self, graph):
+        self.graph = graph
+        self.cycles = []
         
+    def find_cycles(self, node=0, path=[], cost=0):
+        path.append(node)
+        
+        if len(path) > 1:
+            cost += self.graph.cost(path[-2], node)
+        
+        if len(path) == self.graph.size and self.graph.is_adjacent(node, path[0]):
+            path.append(path[0])
+            cost += self.graph.cost(node, path[0])
+            self.cycles.append((cost, path,))
+        else:
+            for u in self.graph.adjacency_list(node).iterkeys():
+                if u not in path:
+                    self.find_cycles(u, list(path), cost)
+                
+                
+    def run(self, start=0):
+        self.find_cycles(start)
+        self.cycles.sort()
+        try:
+            res = self.cycles[0]
+            self.cycles = []
+            return res
+        except:
+            return (False, False)
+            
+            
 if __name__ == '__main__':
     print "Result for random 10-vertex complete graph"
-    graph = Graph.complete(10)
-    graph.linearize()
-
-    cost, path = bruteforce(graph)
+    graph = Graph.complete(5)
+    #graph.linearize()
+    bruteforce = Bruteforce(graph)
+    cost, path = bruteforce.run()
+    print "Cheapest path costs %d and constists of: %s" % (cost, ", ".join(map(str,path)))
+    bruteforce = Bruteforce(Graph(graph))
+    cost, path = bruteforce.run()
+    print "Cheapest path costs %d and constists of: %s" % (cost, ", ".join(map(str,path)))
+    bruteforce = Bruteforce(Graph(graph))
+    cost, path = bruteforce.run()
+    print "Cheapest path costs %d and constists of: %s" % (cost, ", ".join(map(str,path)))
     if cost is not False:
         print "Cheapest path costs %d and constists of: %s" % (cost, ", ".join(map(str,path)))
     else:
