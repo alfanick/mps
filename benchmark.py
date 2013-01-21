@@ -22,12 +22,12 @@ def genetic_100n(graph):
 
 def ant_colony_10n(graph):
     colony = ant_colony.AntColony(graph, ants_number=15,
-            iterations=graph.size*10)
+            iterations=10)
     return colony.run()
 
 def ant_colony_100n(graph):
-    colony = ant_colony.AntColony(graph, ants_number=15,
-            iterations=graph.size*100)
+    colony = ant_colony.AntColony(graph, ants_number=75,
+            iterations=100)
     return colony.run()
     
 def file_inputs_graphes():
@@ -60,8 +60,8 @@ if __name__ == '__main__':
     ALGORITHMS.append(('Greedy Shortest', greedy_shortest,))
     ALGORITHMS.append(('Genetic 10n', genetic_10n,))
     ALGORITHMS.append(('Genetic 100n', genetic_100n,))
-    ALGORITHMS.append(('Ant Colony 10n', ant_colony_10n,))
-    ALGORITHMS.append(('Ant Colony 100n', ant_colony_100n,))
+    ALGORITHMS.append(('Ant Colony 15 ants 10 iterations', ant_colony_10n,))
+    ALGORITHMS.append(('Ant Colony 75 ants 100 iterations', ant_colony_100n,))
 
     TIME = [dict() for n in N]
     RESULT = [dict() for n in N]
