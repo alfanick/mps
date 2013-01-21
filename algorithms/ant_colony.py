@@ -1,6 +1,7 @@
 import sys
 sys.path.append('..')
 from base import *
+from random import random
 
 #DEBUG = True
 DEBUG = False
@@ -41,6 +42,37 @@ class Ant(object):
         res.sort(reverse=True)
         
         return res
+        
+    def exploitation(self):
+        available = [(j, cost) for (j,cost) in self.graph.adjacency_list(self.current_node).iteritems() if j not in self.tabu]
+        
+        best_value = -1
+        best_node = None
+        
+        for (node, cost) in available:
+            value = self.colony.pheromones[self.current_node][node] * (1.0/cost)**self.colony.beta
+            if value > best_value:
+                best_node = node
+                best_value = value
+        
+        return best_node
+        
+    def exploration(self):
+        available = [(j, cost) for (j,cost) in self.graph.adjacency_list(self.current_node).iteritems() if j not in self.tabu]
+        
+        to_sum = [ ((self.colony.pheromones[self.current_node][x]) * (1.0/y)**self.colony.beta) for (x,y) in available ]
+        entire = sum(to_sum)
+        
+        avg = entire / len(available)
+        
+        selected_node = available[0][0]
+        
+        for (node, cost) in available:
+            value = self.colony.pheromones[self.current_node][node] * (1.0/cost)**self.colony.beta
+            if value > avg:
+                selected_node = node
+                
+        return selected_node
             
 
     def step(self):
@@ -54,10 +86,19 @@ class Ant(object):
             self.cost += self.graph.cost(self.tabu[-2], self.tabu[-1])
             return False
         
-        probabilities = self.probabilities(self.current_node)
+        #probabilities = self.probabilities(self.current_node)
 
         # Choose node with biggest probability from sorted list
-        chosen_node = probabilities[0][1]
+        #chosen_node = probabilities[0][1]
+        
+        q = random()
+        if q > self.colony.q0:
+            #print "Exploration"
+            chosen_node = self.exploration()
+        else:
+            #print "Exploitation"
+            chosen_node = self.exploitation()
+        
         
         # Move to node
         self.cost += self.graph.cost(self.current_node, chosen_node)
@@ -74,17 +115,19 @@ class Ant(object):
         
         # Every two tabu nodes
         for i,j in zip(self.tabu, self.tabu[1:]):
-            self.pheromones[i][j] = self.colony.basic_pheromone / self.cost
+            self.pheromones[i][j] = self.colony.alfa / self.cost
+            self.pheromones[j][i] = self.pheromones[i][j]
             
         
             
 class AntColony(object):
     def __init__(self, graph, ants_number, iterations):
         # Parameters
-        self.ro = 0.9
-        self.alfa = 1
+        self.ro = 0.99
+        self.alfa = 0.1
         self.beta = 3.5
-
+        self.q0 = 0.5
+        
         self.graph = graph
         
         self.reset_pheromones()
@@ -117,7 +160,7 @@ class AntColony(object):
         for ant in ants:
             for i in xrange(self.graph.size):
                 for j,pheromone in ant.pheromones[i].iteritems():
-                    if j not in dry[i]:
+                    if True:#j not in dry[i]:
                         self.pheromones[i][j] = (1-self.ro)*self.pheromones[i][j]
                         dry[i][j] = True
                     self.pheromones[i][j] += pheromone
@@ -167,8 +210,8 @@ class AntColony(object):
         
         
 if __name__ == '__main__':
-    graph = Graph.from_input()
-    colony = AntColony(graph, 10, 10)
+    graph = Graph.complete(10)
+    colony = AntColony(graph, 10, 100)
     cost, path = colony.run()
     print cost, path
     
