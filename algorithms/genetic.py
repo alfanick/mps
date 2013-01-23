@@ -5,6 +5,8 @@ from random import randrange, random, shuffle, choice
 from copy import copy
 from heapq import *
 
+import greedy
+
 class Genome(list):
     def __init__(self, graph):
         super(list, self).__init__()
@@ -14,6 +16,8 @@ class Genome(list):
             self.append(i)
 
         shuffle(self)
+
+        #self.extend(greedy.tsp(graph, start = randrange(graph.size))[1][:-1])
 
         self.et = False
 
@@ -95,6 +99,9 @@ class GeneticTSP(object):
                     experiment.crossover(new_population[0])
             
                 heappush(new_population, experiment)
+
+            #print self
+            #print new_population[0]
 
             self.population = new_population
     

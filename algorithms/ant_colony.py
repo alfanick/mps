@@ -126,7 +126,7 @@ class AntColony(object):
         self.ro = 0.99
         self.alfa = 0.1
         self.beta = 3.5
-        self.q0 = 0.5
+        self.q0 = 0.9
         
         self.graph = graph
         

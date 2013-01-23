@@ -30,6 +30,19 @@ def ant_colony_100n(graph):
             iterations=100)
     return colony.run()
     
+def min_rand(graph):
+    min_length = 1000000000
+    min_path = []
+
+    for i in xrange(graph.size * 100):
+        l = greedy.tsp(graph, select_function = greedy.random)
+
+        if (l[0] < min_length):
+            min_length = l[0]
+            min_path = l[1]
+
+    return (min_length, min_path)
+
 def file_inputs_graphes():
     inputs = os.listdir('tests/')
     for filename in inputs:
@@ -38,7 +51,7 @@ def file_inputs_graphes():
     
 
 if __name__ == '__main__':
-    N = xrange(3,12)
+    N = xrange(3,10)
     AVG = 5
 
     benchmark_set = []
@@ -58,6 +71,7 @@ if __name__ == '__main__':
     if rnd:
         ALGORITHMS.append(('Brute Force', bruteforce_run,))     # Comment to fuck bruteforce!!!!
     ALGORITHMS.append(('Greedy Shortest', greedy_shortest,))
+    ALGORITHMS.append(('MIN Random', min_rand,))
     ALGORITHMS.append(('Genetic 10n', genetic_10n,))
     ALGORITHMS.append(('Genetic 100n', genetic_100n,))
     ALGORITHMS.append(('Ant Colony 15 ants 10 iterations', ant_colony_10n,))
